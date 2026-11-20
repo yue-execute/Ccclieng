@@ -7,6 +7,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Unpack project zip if present
+        run: |
+          if [ -f cc-client.zip ]; then
+            mkdir -p src_unzipped
+            unzip -o cc-client.zip -d src_unzipped
+          fi
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
