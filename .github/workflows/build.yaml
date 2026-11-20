@@ -15,8 +15,12 @@ jobs:
         with:
           gradle-version: '8.7'
       - name: Build debug APK
-        run: gradle :app:assembleDebug --no-daemon
+        run: |
+          S=$(find . -name settings.gradle -not -path './.git/*' | head -n1)
+          if [ -z "$S" ]; then echo "settings.gradle not found in repo"; ls -R; exit 1; fi
+          cd "$(dirname "$S")"
+          gradle :app:assembleDebug --no-daemon
       - uses: actions/upload-artifact@v4
         with:
           name: cc-client-apk
-          path: app/build/outputs/apk/debug/*.apk
+          path: '**/app/build/outputs/apk/debug/*.apk'
